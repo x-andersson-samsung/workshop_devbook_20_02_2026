@@ -21,4 +21,6 @@ func (store Store) List() []Item {
 	for _, item := range store {
 		arr = append(arr, item)
 	}
+
+	return arr
 }
