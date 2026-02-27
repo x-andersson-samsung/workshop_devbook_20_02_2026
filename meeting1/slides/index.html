@@ -1624,24 +1624,41 @@ func printItems() {
 
 <div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
 
-- Global store variable 
 - Mixing responsibilities in one file
 	- Logic
 	- User input
 	- Storage
-- Not ready for future expansion
+- Global store variable 
+- Tight coupling
+
+- Validation & Performance - not a focus
 </div>
 </div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
 
-### Folder structure
+### Mixing responsibilities - problem
 </div>
 
 <div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
 
-Basic project structure :
+- "Views" are handling user input and data storage
+- Hard to test - tests have to get "interactive"
+- Harder to reuse code
+- Harder to change / refactor code
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Mixing responsibilities - solution
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Split into packages by domain:
 ```
 devbook
 |- cmd         - for our main file
@@ -1653,6 +1670,125 @@ devbook
 |  |- tui       - handling user interface & interaction
 |  |  |- input.go
 |  |  |- views.go
+```
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Global Store - problem
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+- Hidden dependencies
+- Testability issues
+- Concurrency hazards
+- Tight coupling
+</div>
+</div>
+
+<aside class="notes"><ul>
+<li><strong>Hidden dependencies</strong><ul>
+<li>Functions may look pure but secretly depend on global state.</li>
+<li>Harder to reason about behavior because inputs/outputs aren’t explicit.</li>
+</ul>
+</li>
+<li><strong>Testability suffers</strong><ul>
+<li>Tests become order-dependent if they share the same global store.</li>
+<li>Harder to run tests in parallel (common in Go) without state leaking between tests.</li>
+<li>Mocking becomes awkward: you end up patching globals and carefully resetting them.</li>
+</ul>
+</li>
+<li><strong>Concurrency hazards (especially in Go)</strong><ul>
+<li>Shared mutable global state can cause <strong>data races</strong> unless you guard it (mutexes/atomics/channels).</li>
+<li>Even with locks, you can introduce deadlocks, contention, or subtle timing bugs.</li>
+</ul>
+</li>
+<li><strong>Tight coupling and reduced modularity</strong><ul>
+<li>Many packages/modules become coupled to “the global store,” making refactors painful.</li>
+<li>Harder to reuse components in other projects because they assume a global exists.</li>
+</ul>
+</li>
+<li><strong>Initialization order and lifecycle problems</strong><ul>
+<li>“Who initializes the store, and when?” becomes a recurring bug source.</li>
+<li>Cleanup is tricky (closing DB connections, flushing buffers, stopping goroutines).</li>
+<li>In Go, <code>init()</code> + globals can create fragile startup sequences.</li>
+</ul>
+</li>
+</ul>
+</aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Global Store - solution
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Move to an independent structure
+```go [|1|3-6|8-10|12-14|16-23|25-26|]
+type Store map[string]Item  
+  
+func (store Store) GetByName(name string) (Item, bool) {  
+    item, ok := store[name]  
+    return item, ok  
+}  
+  
+func (store Store) Add(item Item) {  
+    store[item.Name] = item  
+}  
+  
+func (store Store) DeleteByName(name string) {  
+    delete(store, name)  
+}  
+  
+func (store Store) List() []Item {  
+    // Expressive way  
+    arr := make([]Item, 0, len(store))  
+    for _, item := range store {  
+       arr = append(arr, item)  
+    }  
+  
+    return arr  
+  
+    // Compact way  
+    //return slices.Collect(maps.Values(store))
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Tight coupling - problem
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+- View uses direct implementation
+- Harder to change to different source of data
+- Harder to test
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Tight coupling - solution
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Make views use an interface instead
+```go []
+type ItemStore interface {
+
+}
 ```
 </div>
 </div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
