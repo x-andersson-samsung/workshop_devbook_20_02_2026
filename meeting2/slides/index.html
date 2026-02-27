@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Devbook </title>
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="css/slides-extended.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+    <link rel="stylesheet" href="plugin/customcontrols/style.css">
+    <link rel="stylesheet" href="plugin/chalkboard/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+    <script type="text/javascript">
+        function pageInIframe() {
+            return (window.location !== window.parent.location);
+        }
+
+        let forgetPop = true;
+        function onPopState(event) {
+            if(forgetPop){
+                forgetPop = false;
+            } else if( pageInIframe()) {
+                parent.postMessage(event.target.location.href, "app://obsidian.md");
+            }
+        }
+        window.onpopstate = onPopState;
+        window.onmessage = event => {
+            if(event.data == "reload"){
+                window.document.location.reload();
+            }
+            forgetPop = true;
+        }
+
+        function fitElements() {
+            const itemsToFit = document.getElementsByClassName('fitText');
+            for (const item in itemsToFit) {
+                if (Object.hasOwnProperty.call(itemsToFit, item)) {
+                    const element = itemsToFit[item];
+                    fitElement(element, 1, 1000);
+                    element.classList.remove('fitText');
+                }
+            }
+        }
+
+        function fitElement(element, start, end) {
+
+            let size = (end + start) / 2;
+            element.style.fontSize = `${size}px`;
+
+            if (Math.abs(start - end) < 1) {
+                while (element.scrollHeight > element.offsetHeight) {
+                    size--;
+                    element.style.fontSize = `${size}px`;
+                }
+                return;
+            }
+
+            if (element.scrollHeight > element.offsetHeight) {
+                fitElement(element, start, size);
+            } else {
+                fitElement(element, size, end);
+            }
+        }
+
+        document.onreadystatechange = () => {
+            fitElements();
+            if (document.readyState === 'complete') {
+                if (pageInIframe() && window.location.href.indexOf("?export") != -1){
+                    parent.postMessage(event.target.location.href, "app://obsidian.md");
+                }
+                if (window.location.href.indexOf("print-pdf") != -1){
+                    let stateCheck = setInterval(() => {
+                        clearInterval(stateCheck);
+                        window.print();
+                    }, 250);
+                }
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<style>
+
+li,p {
+	font-size: 32px;
+}
+
+code {
+    font-size: 16px;
+    line-height: normal;
+}
+
+/* left-align all content in Slides */
+.reveal .slides {
+    text-align: left;
+}
+
+</style>
+
+
+
+# Devbook 
+## Meeting 2
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Plan
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+- Introduce REST API concepts
+- Add http server to our app
+- Basic resource operations (CRUD)
+- Go templates
+</div>
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# REST
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### What is REST?
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+REST (Representational State Transfer) is a set of rules for building web services that use HTTP methods (GET, POST, PUT, DELETE) to work with data. It's stateless, meaning each request contains all needed information, and uses standard web protocols making it simple and widely adopted for APIs.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_1. Uniform interface_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+All requests made via API must respect that API’s formatting rules. 
+
+No matter what client is making the request, it must put each piece of information where every other client would put it.
+
+One example is the URL used for identifying resources via HTTP.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_2. Client-server separation_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+REST APIs require that client and server applications are totally independent of each other.
+
+The client need only know the full name of the resource it wants.
+
+The only knowledge client and server have of each other is that exchanged by API transactions.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_3. Statelessness_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+
+
+Each client request must contain all the information needed to process it, and the server need not hold any information about that request once it has been received.
+
+There is no concept of a session in REST API design and the server is stateless with respect to any particular client.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 5%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_4. Cacheability_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Resources should be cacheable at one or more points within or between client and server.
+
+In the case of the server, if a particular resource has been served, and it is likely to be requested again within a certain time, it should be cached for a more rapid subsequent response. 
+
+The server should indicate via the API whether a resource can be safely cached locally at the client, including the lifetime of the data, where appropriate.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_5. Layered system architecture_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+A client can make no assumptions about whether it is communicating directly with a server holding a particular resource, or whether it is being served by an intermediate such as a service broker, load balancer, content delivery system or other subsystem closer to the client than the server.
+
+This provides system and infrastructure designers considerable flexibility to maximise the efficiency and reliability of request satisfaction across the global wired and wireless infrastructure.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Rules of REST
+**_6. Code on demand_**
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+While REST APIs can and frequently do serve only data for consumption by the client, it is increasingly common for code to be delivered to run on the client, such as Java objects or Javascript web apps. If this is implemented, then such code can only be run on demand by the client.
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Best practices
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Singleton vs Collection
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+A resource can be a singleton or a collection
+
+For example **_customers_** is a collection while **_customer_** is a singleton
+
+```
+/customers      // a collection resource
+/customers/{id} // singleton resource
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Sub collections
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Subcollections should extend the location.
+
+For example if **_customer_** has **_account_** resources.
+
+```
+/customers/{id}/accounts          // all accounts belonging to customer {id}
+/customers/{id}/accounts/{acc_id} // a single account of customer {id}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Best practices
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+- Use nouns to represent resources
+- Use singular for singletons and plural for collections
+- Use forward slash (/) to indicate hierarchical relationships
+- Do not use file extensions
+- Do not use CRUD function names in URIs
+- Use query component to filter URI collection
+- [And many more](https://restfulapi.net/rest-api-best-practices/)
+
+</div>
+</div>
+
+<aside class="notes"><p>Do not use file extensions
+For file extensions you should rely on <code>Content-Type</code> headers</p>
+<p>Do not use CRUD function names in URIs
+You should use HTTP request methods instead</p>
+</aside></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Go
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Server
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http servers - handlers
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Handlers process incoming requests.
+
+```go
+// from http package
+
+// Function
+type HandlerFunc func(ResponseWriter, *Request)
+
+// Interface
+type Handler interface {  
+  ServeHTTP(ResponseWriter, *Request)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http servers - setup
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Go standard library provides a package for setting up both HTTP clients and servers.
+
+###### Simplest
+```go [|5-7|11-14]
+import "net/http"
+
+// Handling function for std must have the signature:  
+// func(http.ResponseWriter, *http.Request)  
+func indexHandler(w http.ResponseWriter, r *http.Request) {  
+    w.Write([]byte("Hello World!"))  
+}  
+  
+func main() {  
+    // Start server  
+    if err := http.ListenAndServe(
+	    ":8080",
+	     http.HandlerFunc(indexHandler)
+	 ); err != nil {  
+       panic(err)  
+    }  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http servers - setup
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Go standard library provides a package for setting up both HTTP clients and servers.
+
+###### Simple
+```go [|3-7|9-10|12-15|17-20]
+import "net/http"
+
+// Handling function for std must have the signature:  
+// func(http.ResponseWriter, *http.Request)  
+func indexHandler(w http.ResponseWriter, r *http.Request) {  
+    w.Write([]byte("Hello World!"))  
+}  
+func main() {  
+    // Setup HTTP multiplexer  
+    mux := http.NewServeMux()  
+  
+    // Add routes  
+    mux.HandleFunc("/", indexHandler)  
+    mux.HandleFunc("GET /users", userListHandler)  
+    mux.HandleFunc("GET /users/{id}", userGetHandler)  
+  
+    // Start server  
+    if err := http.ListenAndServe(":8080", mux); err != nil {  
+       panic(err)  
+    }  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http servers - setup
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Go standard library provides a package for setting up both HTTP clients and servers.
+
+###### Advanced 1 - Handler
+```go [|7-11|13-20]
+import "net/http"
+
+type  UserStore interface {
+	Get(id string) (User, err)
+}
+
+// Instead of passing functions we can use our own handler as long as
+// it implements `http.Handler` interface
+type UserHandler struct {
+	user  UserStore
+}
+
+func (usrH UserHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	// Get id from path
+	id := r.PathValue("id")
+
+	 user, err := usrH.user.Get(id)
+	 // handle error or return user
+	 // ...
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http servers - setup
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Go standard library provides a package for setting up both HTTP clients and servers.
+
+###### Advanced 2 - Server
+```go [|7-8|9|10|11-14|15|16-17]
+import "net/http"
+
+func main() {  
+	// http.Server gives us a lot of fields to modify server behaviour 
+	// instead of using the default one
+    srv := &http.Server{  
+       Addr:                         "localhost:8080",  
+       Handler:                      &UserHandler{},  
+       DisableGeneralOptionsHandler: false,  
+       TLSConfig:                    nil,  
+       ReadTimeout:                  0,  
+       ReadHeaderTimeout:            0,  
+       WriteTimeout:                 0,  
+       IdleTimeout:                  0,  
+       MaxHeaderBytes:               0,  
+       BaseContext:                  nil,  
+       ConnContext:                  nil,  
+    }  
+    srv.ListenAndServe()                          // !!In code handle error
+    srv.ListenAndServeTLS("cert.pem", "key.pem")  // !!In code handle error
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Requests
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Object: **_http.Request_**
+
+```go
+type Request struct {
+	Method string
+	URL *url.URL
+	Header Header
+
+	Body io.ReadCloser
+	Form url.Values
+	PostForm url.Values
+	MultipartForm *multipart.Form
+
+	ctx context.Context
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Requests - form data
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go
+func handler(w http.ResponseWriter, r *http.Request) {
+	// /users/{id}  
+	r.PathValue("id")  
+  
+	// Parse form  
+	err := r.ParseForm() // remember to handle error  
+
+	// Url query + post form
+	r.Form.Get("key")  
+	r.Form["key"]  
+
+	// Only post form
+	r.PostForm.Get("key")  
+	r.PostForm["key"]
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Requests - body
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+**_io.ReadAll_** is a helper function for getting all data from an **_io.Reader_**
+```go
+func handler(w http.ResponseWriter, r *http.Request) {
+
+	data, err := io.ReadAll(r.Body)
+	
+	if err != nil { // handle error }
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Response
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Interface: **_http.ResponseWriter_**
+
+```go
+type ResponseWriter interface {
+	// Header returns the header map that will be sent by
+	// [ResponseWriter.WriteHeader]. 
+	Header() Header
+
+	// Write writes the data to the connection as part of an HTTP reply.
+	//
+	// If [ResponseWriter.WriteHeader] has not yet been called, Write calls
+	// WriteHeader(http.StatusOK) before writing the data.
+	Write([]byte) (int, error)
+
+	// WriteHeader sends an HTTP response header with the provided
+	// status code.
+	WriteHeader(statusCode int)
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Response - example
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+**_http_** package contains contants for HTTP methods and status codes.
+
+```go
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	
+	w.WriteHeader(http.StatusOK)
+	
+	w.Write(`{"status": "ok"}`)
+}
+```
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Client side
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Basic requests
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+**_http_** package contains helper funcions for most common requests.
+
+```go
+Head(url string) (resp *Response, err error)
+
+Get(url string) (resp *Response, err error)
+
+Post(url, contentType string, body io.Reader) (resp *Response, err error)
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Basic requests - example GET
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	req, err := http.Get("https://echo.free.beeceptor.com/sample-request")  
+	if err != nil {  
+	    panic(err)  
+	}  
+	  
+	body, err := io.ReadAll(req.Body)  
+	if err != nil {  
+	    panic(err)  
+	}  
+	  
+	fmt.Println(string(body))
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Basic requests - example POST
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 90%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+func main() {
+	req, err := http.Post(
+		"https://echo.free.beeceptor.com/sample-request",
+		"application/json",
+		strings.NewReader(`{"key": "value"}`),
+	)
+	if err != nil {panic(err)}
+
+	body, err := io.ReadAll(req.Body)
+	if err != nil {panic(err)}
+
+	fmt.Println(string(body))
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### More customization
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 90%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+func main() {
+	req, err := http.NewRequest(http.MethodGet, "someURL", nil)
+
+	// We can modify headers
+	req.Header.Set("Content-Type", "application/json")
+
+	// We can set auth
+	req.SetBasicAuth("username", "password")
+	
+
+	resp, err := http.DefaultClient.Do(req)
+}
+```
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# JSON
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### JSON handling
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 90%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Go provides builtin handling with **_encoding/json_** package and tags.
+```go[]
+type User struct {
+	FirstName string `json:"firstname"`
+	LastName string `json:"lastname"`
+	
+	SkippedField string `json:"-"`	
+}
+
+const data = `{"firstname": "John", "lastname":"Doe", "address":"123"}`
+
+// Unmarshalling (Decoding)
+var u User
+err = json.Unmarshall(data, &u)
+
+// Marshalling (Encoding)
+data, err = json.Marshall(u)
+```
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Exercises
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Exercise 1
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Write an "echo" server with its client.
+
+- **_GET /echo_** return "Hello World!".
+- **_POST /echo_** return provided body.
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Exercise 2
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Write 2 handlers. Each will receive 2 query parameters **_a_** and **_b_**.
+
+- AddHandler - returning sum of a & b
+- SubHandler - returning difference of a & b
+
+You can assume input will be correct and skip error checking.
+
+Hint: 
+
+- **_strconv.Atoi_** & **_strconv.ItoA_** will help convert types
+- You can cast **_string_** to **_[]byte_** to use in **_w.Write_**
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Exercise 3
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Write a handler processing body parameters.
+
+- AddHandler - returning sum of all values.
+
+Parameters will be provided in JSON body:
+```json
+{
+	"values": [1,2,3,4]
+}
+```
+
+Expected response format:
+```json
+{
+	"result": 10
+}
+``` 
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Back to Devbook
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Preparations
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Add **_ID_** to Item:
+```go []
+type Item struct {  
+    ID          int    `json:"id"`  
+    Name        string `json:"name"`  
+    Description string `json:"description"`  
+    URL         string `json:"URL"`  
+}
+```
+
+Modify store to be based on ID:
+```go
+type Store struct {  
+    nextID int  
+    data   map[int]Item  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Preparations - store functions
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (store *Store) GetByID(id int) (Item, bool) {  
+    item, ok := store.data[id]  
+    return item, ok  
+}  
+  
+func (store *Store) GetByName(name string) (Item, bool) {  
+    for _, item := range store.data {  
+       if item.Name == name {  
+          return item, true  
+       }  
+    }  
+  
+    return Item{}, false  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Preparations - store functions
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (store *Store) Add(item Item) {  
+    item.ID = store.nextID  
+    store.nextID++  
+  
+    store.data[item.ID] = item  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Preparations - store functions
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (store *Store) DeleteByID(id int) {  
+    delete(store.data, id)  
+}  
+  
+func (store *Store) DeleteByName(name string) {  
+    for id, item := range store.data {  
+       if item.Name == name {  
+          delete(store.data, id)  
+          return  
+       }  
+    }  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Preparations - store functions
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (store *Store) List() []Item {  
+    arr := make([]Item, 0, len(store.data))  
+    for _, item := range store.data {  
+       arr = append(arr, item)  
+    }  
+  
+    slices.SortFunc(arr, func(i, j Item) int {  
+       if i.ID == j.ID {  
+          return 0  
+       }  
+       if i.ID > j.ID {  
+          return 1  
+       }  
+       return -1  
+    })  
+  
+    return arr  
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http Handler
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Lets' create new package **_pkg/api_**
+```go []
+type ItemHandler struct {  
+    Store *devbook.Store  
+}
+
+func (i *ItemHandler) Register(r *http.ServeMux) {  
+    r.HandleFunc("POST /items", i.Create)  
+    r.HandleFunc("GET /items", i.List)  
+    r.HandleFunc("PUT /items/{id}", i.Update)  
+    r.HandleFunc("DELETE /items/{id}", i.Delete)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http Handler - List
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (i *ItemHandler) List(w http.ResponseWriter, r *http.Request) {  
+    items := i.Store.List()  
+  
+    payload, err := json.Marshal(items)  
+    if err != nil {  
+       http.Error(w, err.Error(), http.StatusInternalServerError)  
+       return  
+    }  
+  
+    w.WriteHeader(http.StatusOK)  
+    w.Write(payload)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http Handler - Create
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (i *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {  
+    var item devbook.Item  
+    err := json.NewDecoder(r.Body).Decode(&item)  
+    if err != nil {  
+       http.Error(w, err.Error(), http.StatusBadRequest)  
+       return  
+    }  
+  
+    i.Store.Add(item)  
+  
+    w.WriteHeader(http.StatusNoContent)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Http Handler - Delete
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (i *ItemHandler) Delete(w http.ResponseWriter, r *http.Request) {  
+    idStr := r.PathValue("id")  
+    if idStr == "" {  
+       http.Error(w, "Missing id", http.StatusBadRequest)  
+       return  
+    }  
+  
+    id, err := strconv.Atoi(idStr)  
+    if err != nil {  
+       http.Error(w, err.Error(), http.StatusBadRequest)  
+       return  
+    }  
+  
+    i.Store.DeleteByID(id)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Adapting main - getting index.html
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+// Option 1 - embed the index file into the binary
+
+//go:embed static/items.html  
+var indexData []byte  
+
+// Option 2 - read the file to memory on program start
+func readIndexFile(path string) ([]byte, error) {  
+    return os.ReadFile(path)  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Adapting main - server setup
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+func setupAndRunServer(store *devbook.Store, indexData []byte) error {  
+    mux := http.NewServeMux()  
+  
+    mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {  
+       w.Write(indexData)  
+    })  
+  
+    itemHandler := api.ItemHandler{Store: store}  
+    itemHandler.Register(mux)  
+  
+    fmt.Println("Starting server on " + ServerAddress)  
+    return http.ListenAndServe(ServerAddress, mux)  
+}
+```
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Homework
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Assignments
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+- Add support for editing items on **_"PUT /items/{id}"_**
+- Add pagination support to **_List_**
+	- Hint: FE is sending **_offset_** and **_limit_** query values
+- (optional) Add URL validation to **_Create_** and **_Update_**
+    - Should return different error to FE
+    - For validation see: [url.Parse](https://pkg.go.dev/net/url#Parse)
+- Complete exercises
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/obsidian-markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script src="plugin/mermaid/mermaid.js"></script>
+    <script src="plugin/chart/chart.umd.js"></script>
+    <script src="plugin/chart/plugin.js"></script>
+    <script src="plugin/customcontrols/plugin.js"></script>
+    <script src="plugin/chalkboard/plugin.js"></script>
+
+    <script>
+        function extend() {
+            const target = {};
+            for (let i = 0; i < arguments.length; i++) {
+                const source = arguments[i];
+                for (const key in source) {
+                    if (source.hasOwnProperty(key)) {
+                        target[key] = source[key];
+                    }
+                }
+            }
+            return target;
+        }
+
+        function isLight(color) {
+            let hex = color.replace('#', '');
+
+            // convert #fff => #ffffff
+            if (hex.length == 3) {
+                hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+            }
+
+            const c_r = parseInt(hex.substr(0, 2), 16);
+            const c_g = parseInt(hex.substr(2, 2), 16);
+            const c_b = parseInt(hex.substr(4, 2), 16);
+            const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+            return brightness > 155;
+        }
+
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+
+        if (isLight(bgColor)) {
+            document.body.classList.add('has-light-background');
+        } else {
+            document.body.classList.add('has-dark-background');
+        }
+
+        // default options to init reveal.js
+        const defaultOptions = {
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+            transition: 'default', // none/fade/slide/convex/concave/zoom
+            plugins: [
+                ObsidianMarkdown,
+                RevealHighlight,
+                RevealZoom,
+                RevealNotes,
+                RevealMath.KaTeX,
+                RevealMermaid,
+                RevealChart,
+                RevealCustomControls,
+                RevealChalkboard,
+            ],
+            allottedTime: "120",
+
+            katex: {
+                local: 'plugin/math/katex',
+                extensions: ["mhchem"],
+            },
+            markdown: {
+                gfm: true,
+            },
+            mermaid: {
+                theme: isLight(bgColor) ? 'default' : 'dark',
+            },
+            customcontrols: {
+                controls: [
+                    {
+                        id: 'toggle-overview',
+                        title: 'Toggle overview (O)',
+                        icon: '<i class="fa fa-th"></i>',
+                        action: 'Reveal.toggleOverview();'
+                    },
+                    {
+                        icon: '<i class="fa fa-pen-square"></i>',
+                        title: 'Toggle chalkboard (B)',
+                        action: 'RevealChalkboard.toggleChalkboard();'
+                    },
+                    {
+                        icon: '<i class="fa fa-pen"></i>',
+                        title: 'Toggle notes canvas (C)',
+                        action: 'RevealChalkboard.toggleNotesCanvas();'
+                    },
+                ]
+            },
+        };
+
+        if ( pageInIframe() ) {
+            defaultOptions.scrollActivationWidth = 5;
+        }
+
+        // options from URL query string
+        const queryOptions = Reveal().getQueryHash() || {};
+
+        const options = extend(defaultOptions, {"controls":true,"progress":true,"slideNumber":"true","center":true,"transition":"slide","transitionSpeed":"default","width":960,"height":700,"margin":0.04}, queryOptions);
+    </script>
+
+    <script>
+      /**
+       * KaTeX Equation Numbering Note
+       * 
+       * KaTeX maintains a global equation counter for \begin{equation} environments.
+       * When navigating between slides, reveal.js math plugin may re-render math, causing 
+       * equation numbers to change randomly.
+       * 
+       * Note: Regular $$ blocks don't have equation numbers - only \begin{equation} does.
+       * 
+       * If you experience issues with equation numbers changing:
+       * Use manual \tag{} commands: \begin{equation}\tag{1} ... \end{equation}
+       */
+      
+      Reveal.initialize(options);
+    </script>
+    <!-- created with Slides Extended reveal.html template -->
+</body>
+</html>
