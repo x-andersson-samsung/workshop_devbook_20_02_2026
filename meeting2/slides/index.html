@@ -126,7 +126,6 @@ code {
 - Introduce REST API concepts
 - Add http server to our app
 - Basic resource operations (CRUD)
-- Go templates
 </div>
 </div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
@@ -1078,6 +1077,24 @@ func (i *ItemHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 <div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
 
+### Http Handler - Update
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go []
+func (i *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {  
+    http.Error(w, "Not implemented", http.StatusNotImplemented)  
+}
+```
+
+Part of the homework :).
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
 ### Adapting main - getting index.html
 </div>
 
@@ -1121,6 +1138,57 @@ func setupAndRunServer(store *devbook.Store, indexData []byte) error {
 }
 ```
 </div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Adapting main - full
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+  
+const ServerAddress = ":8080"  
+
+//go:embed static/index.html  
+var indexData []byte  
+  
+func setupAndRunServer(store *devbook.Store, indexData []byte) error {  
+    mux := http.NewServeMux()  
+  
+    mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {  
+       w.Write(indexData)  
+    })  
+  
+    itemHandler := api.ItemHandler{Store: store}  
+    itemHandler.Register(mux)  
+  
+    fmt.Println("Starting server on " + ServerAddress)  
+    return http.ListenAndServe(ServerAddress, mux)  
+}  
+  
+func main() {  
+    // Setup starting data  
+    store := devbook.NewStore()  
+    store.Add(devbook.Item{  
+       Name:        "item1",  
+       Description: "search engine",  
+       URL:         "https://google.pl",  
+    })  
+    store.Add(devbook.Item{  
+       Name:        "item2",  
+       Description: "other search engine",  
+       URL:         "https://bing.com",  
+    })  
+  
+    if err := setupAndRunServer(store, indexData); err != nil {  
+       panic(err)  
+    }  
+}
+```
+</div>
 </div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
@@ -1138,10 +1206,191 @@ func setupAndRunServer(store *devbook.Store, indexData []byte) error {
 - Add support for editing items on **_"PUT /items/{id}"_**
 - Add pagination support to **_List_**
 	- Hint: FE is sending **_offset_** and **_limit_** query values
+- Change ItemHandler Store into an interface 
 - (optional) Add URL validation to **_Create_** and **_Update_**
     - Should return different error to FE
     - For validation see: [url.Parse](https://pkg.go.dev/net/url#Parse)
 - Complete exercises
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Addendum
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Parallel issue
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Let's take a look at our store Add function.
+```go[]
+type Store struct {  
+    nextID int  
+    data   map[int]Item  
+}  
+  
+func NewStore() *Store {  
+    return &Store{  
+       nextID: 1,  
+       data:   make(map[int]Item),  
+    }  
+}
+
+func (store *Store) Add(item Item) {  
+    item.ID = store.nextID  
+    store.nextID++  
+  
+    store.data[item.ID] = item  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Parallel issue
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+If 2 users call Add at the same time there is a chance that only one of their changes will be stored.
+
+We need to protect our store from multiple parallel access.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Parallel issue
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+
+<div class="mermaid">
+sequenceDiagram  
+    participant T1 as Thread 1  
+    participant S as Store  
+    participant T2 as Thread 2  
+  
+    Note over T1,T2: nextID = 1 
+  
+    T1->>S: Add(item1)  
+    T2->>S: Add(item2)  
+      
+    Note over T1: nextID = 1  
+    Note over T2: nextID = 1  
+      
+    T1->>S: nextID++  
+    T2->>S: nextID++  
+      
+    T1->>S: data[1] = item1  
+    T2->>S: data[1] = item2  
+      
+    Note over S: Both items get ID=1 - item1 overwritten!
+
+</div>
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### [**_sync_**](https://pkg.go.dev/sync) package
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+Provides basic synchronization primitives and helper functions for low-level synchronization.
+
+For higher-level it's better to use channels.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### [**_sync_**](https://pkg.go.dev/sync) package - Mutex
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+**_sync.Mutex_**
+```go []
+var mtx sync.Mutex
+
+// Will only allow single routine to enter.
+// Others will wait on this line until Unlock is called.
+mtx.Lock()
+
+// Critical section
+
+mtx.Unlock()
+
+```
+Good for only allowing one routine into the critical section at a time.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Fixing Add function - struct
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+type Store struct {  
+    nextID int  
+    data   map[int]Item
+	mtx sync.Mutex 
+}  
+  
+func NewStore() *Store {  
+    return &Store{  
+       nextID: 1,  
+       data:   make(map[int]Item), 
+       mtx: sync.Mutex{},
+    }  
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" template="" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+### Fixing Add function - Add
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 85%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center" align="left">
+
+```go[]
+func (store *Store) Add(item Item) {  
+	// Lock access to section below
+	store.mtx.Lock()
+
+	// Automatically release the section once we exit function
+	defer store.mtx.Unlock()
+
+	// Critical section start
+    item.ID = store.nextID  
+    store.nextID++  
+  
+    store.data[item.ID] = item  
+    // Critical section end
+}
+```
+
+We should do similar protection in other functions.
 </div>
 </div></script></section></section></div>
     </div>
