@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charsdeset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Training Slides</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Calibri, sans-serif;
+            background: #000;
+        }
+
+        .slide {
+            width: 1280px;
+            height: 720px;
+            background: #000033;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            padding: 60px;
+            position: relative;
+            page-break-after: always;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .blue-text {
+            color: #2196F3;
+        }
+
+        .yellow-text {
+            color: #FFEB3B;
+        }
+
+        .white-text {
+            color: #FFFFFF;
+        }
+
+        .bullet-points {
+            text-align: left;
+            max-width: 900px;
+        }
+
+        .bullet-points ul {
+            list-style: none;
+        }
+
+        .bullet-points li {
+            font-size: 28px;
+            color: #FFFFFF;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: #FFEB3B;
+            font-weight: bold;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            margin-top: 30px;
+        }
+
+        .component-box {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            border: 3px solid #00BCD4;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .component-box.client { background: linear-gradient(135deg, #1565C0, #0D47A1); }
+        .component-box.daemon { background: linear-gradient(135deg, #2E7D32, #1B5E20); }
+        .component-box.host { background: linear-gradient(135deg, #7B1FA2, #4A148C); }
+        .component-box.container { background: linear-gradient(135deg, #1565C0, #0D47A1); }
+        .component-box.image { background: linear-gradient(135deg, #009688, #00695C); }
+        .component-box.repository { background: linear-gradient(135deg, #616161, #424242); }
+        .component-box.registry { background: linear-gradient(135deg, #1565C0, #0D47A1); }
+
+        .component-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .component-description {
+            font-size: 16px;
+            color: #E0E0E0;
+            line-height: 1.3;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        @media print {
+            .slide {
+                margin: 0;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Introduction -->
+    <div class="slide">
+        <div class="slide-title">
+            <span class="blue-text">DOCKER</span> <span class="yellow-text">- SERVICE</span>
+        </div>
+        <div class="slide-subtitle">
+            <span class="yellow-text">FOR RUNNING APPLICATIONS IN CONTAINERS</span>
+        </div>
+        <div class="slide-number">1/41</div>
+    </div>
+
+    <!-- Slide 2: Why Use Docker -->
+    <div class="slide">
+        <div class="slide-title">
+            <span class="yellow-text">WHY USE</span> <span class="blue-text">DOCKER</span>
+        </div>
+        <div class="bullet-points">
+            <ul>
+                <li>Applications run in an <span class="highlight">isolated</span> environment</li>
+                <li>Easy to run applications on <span class="highlight">different</span> servers</li>
+                <li>All application dependencies are installed <span class="highlight">inside containers</span></li>
+                <li>Easy to scale by increasing the number of <span class="highlight">containers</span></li>
+                <li>Very convenient to use in the application <span class="highlight">development</span> process</li>
+            </ul>
+        </div>
+        <div class="slide-number">2/41</div>
+    </div>
+
+    <!-- Slide 3: What is a Container -->
+    <div class="slide">
+        <div class="slide-title">
+            <span class="blue-text">A CONTAINER</span> <span class="white-text">IS THE</span> <span class="yellow-text">SMALLEST ELEMENT</span> <span class="white-text">IN THE</span> <span class="blue-text">DOCKER WORLD</span>
+        </div>
+        <div class="slide-number">3/41</div>
+    </div>
+
+        <!-- Slide 4: Docker Components -->
+        <div class="slide">
+            <div class="slide-title">
+                <span class="yellow-text">DOCKER</span> <span class="blue-text">COMPONENTS</span>
+            </div>
+            <div class="components-grid">
+                <div class="component-box client">
+                    <div class="component-name">CLIENT</div>
+                    <div class="component-description">User interface for Docker</div>
+                </div>
+                <div class="component-box daemon">
+                    <div class="component-name">DAEMON</div>
+                    <div class="component-description">Background service managing Docker objects</div>
+                </div>
+                <div class="component-box host">
+                    <div class="component-name">HOST</div>
+                    <div class="component-description">Machine running Docker</div>
+                </div>
+                <div class="component-box container">
+                    <div class="component-name">CONTAINER</div>
+                    <div class="component-description">Running instance of an image</div>
+                </div>
+                <div class="component-box image">
+                    <div class="component-name">IMAGE</div>
+                    <div class="component-description">Read-only template for containers</div>
+                </div>
+                <div class="component-box repository">
+                    <div class="component-name">REPOSITORY</div>
+                    <div class="component-description">Storage location for Docker images</div>
+                </div>
+                <div class="component-box registry">
+                    <div class="component-name">REGISTRY</div>
+                    <div class="component-description">Service that stores repositories</div>
+                </div>
+            </div>
+            <div class="slide-number">4/41</div>
+    </div>
+
+        <!-- Slide 5: How Containers Work -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 30px;">
+                <span class="yellow-text">HOW CONTAINERS WORK</span>
+            </div>
+            
+            <div class="architecture-diagram">
+                <!-- Containers Row -->
+                <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                    <div class="container-diagram" style="background: linear-gradient(135deg, #1565C0, #0D47A1);">
+                        <div style="color: #FFEB3B; font-weight: bold; font-size: 18px; text-align: center; padding: 10px;">CONTAINER 1</div>
+                        <div style="background: #FFF3E0; color: #333; padding: 8px; margin: 5px; border-radius: 5px; text-align: center; font-size: 14px;">Process</div>
+                    </div>
+                    <div class="container-diagram" style="background: linear-gradient(135deg, #009688, #00695C);">
+                        <div style="color: #FFEB3B; font-weight: bold; font-size: 18px; text-align: center; padding: 10px;">CONTAINER 2</div>
+                        <div style="background: #FFF3E0; color: #333; padding: 8px; margin: 5px; border-radius: 5px; text-align: center; font-size: 14px;">Process</div>
+                    </div>
+                    <div class="container-diagram" style="background: linear-gradient(135deg, #7B1FA2, #4A148C);">
+                        <div style="color: #FFEB3B; font-weight: bold; font-size: 18px; text-align: center; padding: 10px;">CONTAINER 3</div>
+                        <div style="background: #FFF3E0; color: #333; padding: 8px; margin: 5px; border-radius: 5px; text-align: center; font-size: 14px;">Process</div>
+                        <div style="background: #FFF3E0; color: #333; padding: 8px; margin: 5px; border-radius: 5px; text-align: center; font-size: 14px;">Process</div>
+                    </div>
+                </div>
+
+                <!-- Docker Engine -->
+                <div style="background: linear-gradient(135deg, #1976D2, #0D47A1); padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <div style="color: #FFFFFF; font-weight: bold; font-size: 24px;">DOCKER ENGINE</div>
+                </div>
+
+                <!-- Resources -->
+                <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                    <div style="background: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 16px;">RAM</div>
+                    <div style="background: #2196F3; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 16px;">CPU</div>
+                    <div style="background: #00BCD4; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 16px;">NETWORK</div>
+                </div>
+
+                <!-- Linux Kernel -->
+                <div style="background: linear-gradient(135deg, #D32F2F, #B71C1C); padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <div style="color: #FFFFFF; font-weight: bold; font-size: 24px;">LINUX KERNEL</div>
+                </div>
+
+                <!-- Disk Storage -->
+                <div style="background: #424242; padding: 20px; border-radius: 10px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <div style="color: #FFEB3B; font-weight: bold; font-size: 20px; text-align: center; margin-bottom: 15px;">DISK</div>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                        <div style="background: linear-gradient(135deg, #1565C0, #0D47A1); padding: 10px 15px; border-radius: 5px; color: white; font-size: 14px;">Container 1 files</div>
+                        <div style="background: linear-gradient(135deg, #009688, #00695C); padding: 10px 15px; border-radius: 5px; color: white; font-size: 14px;">Container 2 files</div>
+                        <div style="background: linear-gradient(135deg, #7B1FA2, #4A148C); padding: 10px 15px; border-radius: 5px; color: white; font-size: 14px;">Container 3 files</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">5/41</div>
+        </div>
+
+        <!-- Slide 6: Docker on Mac and Windows -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 30px;">
+                <span class="yellow-text">DOCKER ON</span> <span style="color: #EC407A;">MAC</span> <span class="yellow-text">AND</span> <span style="color: #00BCD4;">WINDOWS</span>
+            </div>
+
+            <!-- Outer Box: Mac or Windows -->
+            <div style="border: 3px solid #00BCD4; border-radius: 20px; padding: 30px; max-width: 850px; margin: 0 auto;">
+                <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 25px;">
+                    Mac or Windows
+                </div>
+
+                <!-- Inner Box: Docker Desktop -->
+                <div style="background: #696969; border-radius: 15px; padding: 25px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Docker Desktop</span>
+                        <span style="color: #B0B0B0; font-size: 24px; font-weight: bold;"> (Linux VM)</span>
+                    </div>
+
+                    <!-- Containers Row -->
+                    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px;">
+                        <div style="background: #5E35B1; border: 3px solid #7E57C2; border-radius: 10px; padding: 15px 25px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 18px; text-align: center;">Container 1</div>
+                        </div>
+                        <div style="background: #00ACC1; border: 3px solid #26C6DA; border-radius: 10px; padding: 15px 25px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 18px; text-align: center;">Container 2</div>
+                        </div>
+                        <div style="background: #AB47BC; border: 3px solid #CE93D8; border-radius: 10px; padding: 15px 25px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 18px; text-align: center;">Container 3</div>
+                        </div>
+                    </div>
+
+                    <!-- Docker Engine -->
+                    <div style="background: #00BCD4; border: 3px solid #26C6DA; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px;">
+                        <div style="color: #FFFFFF; font-weight: bold; font-size: 20px;">Docker Engine</div>
+                    </div>
+
+                    <!-- Linux Kernel -->
+                    <div style="background: #E57373; border: 3px solid #EF5350; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px;">
+                        <div style="color: #FFFFFF; font-weight: bold; font-size: 20px;">Linux Kernel</div>
+                    </div>
+
+                    <!-- Resources Row -->
+                    <div style="display: flex; justify-content: center; gap: 15px;">
+                        <div style="background: #66BB6A; border: 3px solid #81C784; border-radius: 10px; padding: 12px 20px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 16px;">RAM</div>
+                        </div>
+                        <div style="background: #5C6BC0; border: 3px solid #7986CB; border-radius: 10px; padding: 12px 20px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 16px;">CPU</div>
+                        </div>
+                        <div style="background: #78909C; border: 3px solid #90A4AE; border-radius: 10px; padding: 12px 20px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 16px;">Disk</div>
+                        </div>
+                        <div style="background: #26A69A; border: 3px solid #4DB6AC; border-radius: 10px; padding: 12px 20px;">
+                            <div style="color: #FFFFFF; font-weight: bold; font-size: 16px;">Network</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-number">6/41</div>
+        </div>
+
+        <!-- Slide 7: One Image, Many Containers -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 50px;">
+                <span class="yellow-text">USING ONE</span> <span class="blue-text">IMAGE</span> <span class="yellow-text">YOU CAN CREATE</span> <span class="blue-text">MANY CONTAINERS</span>
+            </div>
+            
+            <div class="image-container-relationship">
+                <!-- Image Box -->
+                <div style="display: flex; justify-content: center; margin-bottom: 60px;">
+                    <div style="background: linear-gradient(135deg, #FFEB3B, #FFC107); padding: 30px 60px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                        <div style="color: #000; font-weight: bold; font-size: 32px;">IMAGE</div>
+                    </div>
+                </div>
+
+                <!-- Arrows and Containers -->
+                <div style="display: flex; justify-content: center; align-items: flex-start; gap: 60px;">
+                    <!-- First Container -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- Arrow -->
+                        <div style="color: #FFEB3B; font-size: 40px; margin-bottom: 20px; font-weight: bold;">↓</div>
+                        <!-- Container Box -->
+                        <div style="background: linear-gradient(135deg, #2196F3, #1976D2); padding: 30px 50px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                            <div style="color: #FFF; font-weight: bold; font-size: 28px;">CONTAINER</div>
+                        </div>
+                    </div>
+
+                    <!-- Second Container -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- Arrow -->
+                        <div style="color: #FFEB3B; font-size: 40px; margin-bottom: 20px; font-weight: bold;">↓</div>
+                        <!-- Container Box -->
+                        <div style="background: linear-gradient(135deg, #2196F3, #1976D2); padding: 30px 50px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                            <div style="color: #FFF; font-weight: bold; font-size: 28px;">CONTAINER</div>
+                        </div>
+                    </div>
+
+                    <!-- Third Container -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- Arrow -->
+                        <div style="color: #FFEB3B; font-size: 40px; margin-bottom: 20px; font-weight: bold;">↓</div>
+                        <!-- Container Box -->
+                        <div style="background: linear-gradient(135deg, #2196F3, #1976D2); padding: 30px 50px; border-radius: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                            <div style="color: #FFF; font-weight: bold; font-size: 28px;">CONTAINER</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Text -->
+                <div style="text-align: center; margin-top: 50px; color: #E0E0E0; font-size: 20px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    A single Docker image serves as a template that can be used to create multiple running container instances
+                </div>
+            </div>
+            <div class="slide-number">7/41</div>
+        </div>
+
+        <!-- Slide 8: Structure of Images -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">STRUCTURE OF</span> <span class="blue-text">IMAGES</span>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 60px; align-items: flex-start;">
+                <!-- Left Panel: Layer Diagram -->
+                <div style="background: rgba(0, 188, 212, 0.1); border: 3px solid #00BCD4; border-radius: 15px; padding: 30px; text-align: center;">
+                    <div style="color: #FFFFFF; font-weight: bold; font-size: 28px; margin-bottom: 30px;">IMAGE</div>
+                    
+                    <!-- Layers Stack -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: linear-gradient(135deg, #64B5F6, #2196F3); padding: 15px 40px; border-radius: 8px; color: #FFFFFF; font-weight: bold; font-size: 20px;">LAYER 3</div>
+                        <div style="background: linear-gradient(135deg, #42A5F5, #1976D2); padding: 15px 40px; border-radius: 8px; color: #FFFFFF; font-weight: bold; font-size: 20px;">LAYER 2</div>
+                        <div style="background: linear-gradient(135deg, #EC407A, #E91E63); padding: 15px 40px; border-radius: 8px; color: #FFFFFF; font-weight: bold; font-size: 20px;">LAYER 1</div>
+                        <div style="background: linear-gradient(135deg, #757575, #616161); padding: 15px 40px; border-radius: 8px; color: #FFFFFF; font-weight: bold; font-size: 20px;">BASE LAYER</div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Bullet Points -->
+                <div style="max-width: 500px;">
+                    <div class="bullet-points" style="max-width: 100%;">
+                        <ul>
+                            <li style="margin-bottom: 30px;">All layers are <span class="highlight">read-only</span></li>
+                            <li style="margin-bottom: 30px;">Images can be <span class="highlight">moved and deleted</span></li>
+                            <li style="margin-bottom: 30px;">Images are stored in <span class="highlight">repositories</span></li>
+                            <li style="margin-bottom: 30px;">There are <span class="highlight">official images</span> and <span class="highlight">community images</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">8/41</div>
+        </div>
+
+        <!-- Slide 9: What is a Repository -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">WHAT IS A</span> <span class="blue-text">REPOSITORY</span>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 60px; align-items: flex-start;">
+                <!-- Left Panel: Repository Visualization -->
+                <div style="background: linear-gradient(135deg, #00BCD4, #0097A7); border: 3px solid #00BCD4; border-radius: 15px; padding: 30px; text-align: center; min-width: 350px;">
+                    <div style="color: #FFFFFF; font-weight: bold; font-size: 32px; margin-bottom: 30px;">REPOSITORY</div>
+                    
+                    <!-- Version Groups -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Group 1: Latest versions -->
+                        <div style="background: linear-gradient(135deg, #64B5F6, #2196F3); padding: 15px 20px; border-radius: 8px;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">latest</div>
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">8.0.1</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group 2: Version 7 -->
+                        <div style="background: linear-gradient(135deg, #90CAF9, #42A5F5); padding: 15px 20px; border-radius: 8px;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">7</div>
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">7.4</div>
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">7.4.3</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group 3: Version 5 -->
+                        <div style="background: linear-gradient(135deg, #F06292, #C2185B); padding: 15px 20px; border-radius: 8px;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">5.0</div>
+                                <div style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; color: #FFFFFF; font-size: 14px; font-weight: bold;">5.0.8</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Bullet Points -->
+                <div style="max-width: 500px;">
+                    <div class="bullet-points" style="max-width: 100%;">
+                        <ul>
+                            <li style="margin-bottom: 35px;">Different <span class="highlight">image versions</span> are stored in the repository</li>
+                            <li style="margin-bottom: 35px;">Different versions are marked with different <span class="highlight">tags</span></li>
+                            <li style="margin-bottom: 35px;">One image version can have <span class="highlight">multiple tags</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">9/41</div>
+        </div>
+
+        <!-- Slide 10: Docker Command Example -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">Shows a list</span><br/>
+                <span class="yellow-text">running and stopped</span><br/>
+                <span class="yellow-text">containers</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">docker ps -a</div>
+                </div>
+            </div>
+            <div class="slide-number">10/41</div>
+        </div>
+
+        <!-- Slide 11: Docker Images Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">Shows a list of local images</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">docker images</div>
+                </div>
+            </div>
+            <div class="slide-number">11/41</div>
+        </div>
+
+        <!-- Slide 12: Docker Run Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">Creates and runs a container</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker run <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">hello-world</span>
+                    </div>
+                    
+                    <!-- Annotation: Image Name -->
+                    <div style="position: absolute; right: -220px; top: 50%; transform: translateY(-50%);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">Image Name</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">12/41</div>
+        </div>
+
+        <!-- Slide 13: Docker Rm Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">Removes a stopped container</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker rm <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">container-id/name</span>
+                    </div>
+                    
+                    <!-- Annotation: Container ID/Name -->
+                    <div style="position: absolute; right: -260px; top: 50%; transform: translateY(-50%);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">Container ID</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">or Name</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">13/41</div>
+        </div>
+
+        <!-- Slide 14: Creating Busybox Container -->
+        <div class="slide">
+            <div class="slide-title">
+                <span class="yellow-text">CREATING BUSYBOX</span> <span class="blue-text">CONTAINER</span>
+            </div>
+            <div class="slide-number">14/41</div>
+        </div>
+
+        <!-- Slide 15: Docker Run -d Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">CREATES AND RUNS CONTAINER</span> <span class="blue-text">IN BACKGROUND MODE</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker run <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">-d</span> <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">nginx</span>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div style="position: absolute; right: -280px; top: 50%; transform: translateY(-50%);">
+                        <!-- Annotation for -d -->
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">Background mode</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                        <!-- Annotation for nginx -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">Image name</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div style="color: #FFEB3B; font-size: 50px; font-weight: bold;">↑</div>
+
+                <!-- Explanatory Text -->
+                <div style="text-align: center; color: #FFEB3B; font-size: 28px; line-height: 1.6; max-width: 700px;">
+                    <div>Creates and runs container</div>
+                </div>
+            </div>
+            <div class="slide-number">15/41</div>
+        </div>
+
+        <!-- Slide 16: Docker Stop Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">STOPPING</span> <span class="blue-text">CONTAINER</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker stop <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">container-id/name</span>
+                    </div>
+                    
+                    <!-- Annotation: Container ID/Name -->
+                    <div style="position: absolute; right: -260px; top: 50%; transform: translateY(-50%);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">Container ID</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                            <div style="color: #FFEB3B; font-size: 20px; font-weight: bold;">or Name</div>
+                            <div style="color: #9C27B0; font-size: 30px;">←</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div style="color: #FFEB3B; font-size: 50px; font-weight: bold;">↑</div>
+
+                <!-- Explanatory Text -->
+                <div style="text-align: center; color: #FFEB3B; font-size: 28px; line-height: 1.6; max-width: 700px;">
+                    <div>Stops a running container</div>
+                </div>
+            </div>
+            <div class="slide-number">16/41</div>
+        </div>
+
+        <!-- Slide 17: Mapping Ports -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">MAPPING</span> <span class="blue-text">PORTS</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker run -p 8080:80 nginx
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div style="color: #FFEB3B; font-size: 50px; font-weight: bold;">↑</div>
+
+                <!-- Explanatory Text -->
+                <div style="text-align: center; color: #FFEB3B; font-size: 28px; line-height: 1.6; max-width: 700px;">
+                    <div>Creating and running container</div>
+                </div>
+            </div>
+            <div class="slide-number">17/41</div>
+        </div>
+
+        <!-- Slide 18: Creating Volumes -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 30px;">
+                <span class="yellow-text">CREATING</span> <span class="blue-text">VOLUMES</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; margin-top: 40px;">
+
+                <!-- Annotations above command with precise positioning -->
+                <div style="position: relative; width: 1050px; height: 70px; margin-bottom: 5px;">
+                    <!-- Path to local folder - positioned above ${PWD} -->
+                    <div style="position: absolute; left: 285px; top: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                        <div style="color: #FFEB3B; font-size: 17px; font-weight: bold; text-align: center; line-height: 1.2;">Path to<br/>local folder</div>
+                        <div style="color: #FFEB3B; font-size: 32px; line-height: 0.9;">↓</div>
+                    </div>
+
+                    <!-- Path to folder inside container - positioned above /usr/share... -->
+                    <div style="position: absolute; left: 490px; top: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                        <div style="color: #FFEB3B; font-size: 17px; font-weight: bold; text-align: center; line-height: 1.2;">Path to folder<br/>inside container</div>
+                        <div style="color: #FFEB3B; font-size: 32px; line-height: 0.9;">↓</div>
+                    </div>
+
+                    <!-- Image name - positioned above nginx -->
+                    <div style="position: absolute; left: 865px; top: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                        <div style="color: #FFEB3B; font-size: 17px; font-weight: bold; text-align: center; line-height: 1.2;">Image<br/>name</div>
+                        <div style="color: #FFEB3B; font-size: 32px; line-height: 0.9;">↓</div>
+                    </div>
+                </div>
+
+                <!-- Command Box -->
+                <div style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+                    <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 35px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                        <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 30px; font-weight: bold; letter-spacing: 2px;">
+                            docker run -v ${PWD}:/usr/share/nginx/html nginx
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="slide-number">18/41</div>
+        </div>
+
+        <!-- Slide 19: Remove Automatically Stopped Containers -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">REMOVE AUTOMATICALLY</span> <span class="blue-text">STOPPED CONTAINERS</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">
+                        docker run --rm busybox
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">19/41</div>
+        </div>
+
+        <!-- Slide 20: Line Breaks in Commands -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">LINE BREAKS</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Command Box with multi-line command -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 28px; font-weight: bold; letter-spacing: 1px; line-height: 1.8; text-align: left;">
+                        docker run <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;--name my-nginx <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;-v ${PWD}:/usr/share/nginx/html <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;-p 8888:80 <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;-d <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;--rm <span style="color: #FFEB3B;">\</span><br/>
+                        nginx
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">20/41</div>
+        </div>
+
+        <!-- Slide 21: Steps for Creating Images -->
+        <div class="slide">
+            <div class="slide-title">
+                <span class="yellow-text">STEPS FOR CREATING</span> <span class="blue-text">IMAGES</span>
+            </div>
+            <div class="bullet-points">
+                <ul>
+                    <li>To create an image, you need a <span class="highlight">Dockerfile</span></li>
+                    <li>Usually Dockerfile is placed <span class="highlight">in the root</span> folder of the application</li>
+                    <li><span class="highlight">Dockerfile</span> contains instructions for creating the image</li>
+                    <li>When creating an image, you can specify a <span class="highlight">name and tag</span> for the image</li>
+                    <li>Based on a ready image, you can create <span class="highlight">containers</span></li>
+                </ul>
+            </div>
+            <div class="slide-number">21/41</div>
+        </div>
+
+        <!-- Slide 22: Dockerfile Example -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">DOCKERFILE</span> <span class="blue-text">EXAMPLE</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Code Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); text-align: left;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 32px; font-weight: bold; letter-spacing: 1px; line-height: 1.8;">
+                        <span style="color: #FFA726;">FROM</span> python:alpine<br/>
+                        <br/>
+                        <span style="color: #FFA726;">WORKDIR</span> /app<br/>
+                        <br/>
+                        <span style="color: #FFA726;">COPY</span> . .<br/>
+                        <br/>
+                        <span style="color: #FFA726;">CMD</span> [ "python", "main.py" ]
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">22/41</div>
+        </div>
+
+        <!-- Slide 23: Docker Build Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">BUILDING</span> <span class="blue-text">IMAGE</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 1px;">
+                        docker build . -t my-app:4.1.3
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">23/41</div>
+        </div>
+
+        <!-- Slide 24: Stop All Running Containers -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="yellow-text">STOP ALL RUNNING</span> <span class="blue-text">CONTAINERS</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 1px;">
+                        docker stop $(docker ps -q)
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">24/41</div>
+        </div>
+
+        <!-- Slide 25: Docker Compose -->
+        <div class="slide">
+            <div class="slide-title">
+                <span class="yellow-text">DOCKER</span>
+            </div>
+            <div class="slide-title">
+                <span class="yellow-text">COMPOSE</span>
+            </div>
+            <div class="slide-number">25/41</div>
+        </div>
+
+        <!-- Slide 26: Imperative Approach -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">IMPERATIVE</span> <span class="blue-text">APPROACH</span>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 40px; align-items: flex-start;">
+                <!-- Left Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 40px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; letter-spacing: 1px;">
+                        docker <span style="color: #EC407A;">stop</span> <span style="color: #BA68C8;">my-app</span>
+                    </div>
+                </div>
+
+                <!-- Right Command Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 30px 40px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; letter-spacing: 1px; line-height: 1.8; text-align: left;">
+                        docker run <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">--name</span> my-nginx <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">-v</span> ${PWD}:/usr/share/nginx/html <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">-p</span> 8888:80 <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">-d</span> <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">--rm</span> <span style="color: #FFEB3B;">\</span><br/>
+                        &nbsp;&nbsp;nginx
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">26/41</div>
+        </div>
+
+        <!-- Slide 27: Declarative Approach -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="blue-text">DECLARATIVE</span> <span class="yellow-text">APPROACH</span>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 60px; align-items: center;">
+                <!-- Left Label -->
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="color: #00BCD4; font-size: 32px; font-weight: bold;">
+                        docker-compose.yml
+                    </div>
+                    <div style="color: #FFEB3B; font-size: 60px;">→</div>
+                </div>
+
+                <!-- Code Box -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); text-align: left;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 28px; font-weight: bold; letter-spacing: 1px; line-height: 1.8;">
+                        <span style="color: #BA68C8;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
+                        <br/>
+                        <span style="color: #BA68C8;">services:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">app:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #BA68C8;">build:</span> ./app<br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8;">mongo:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #BA68C8;">image:</span> mongo
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">27/41</div>
+        </div>
+
+        <!-- Slide 28: YAML Format -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 80px;">
+                <span class="blue-text">YAML</span> <span class="yellow-text">FORMAT</span>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: flex-start; gap: 80px;">
+                <!-- Left: List Section -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                    <div style="color: #FFEB3B; font-size: 36px; font-weight: bold;">
+                        LIST
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                        <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; letter-spacing: 1px; line-height: 1.8; text-align: left;">
+                            <span style="color: #BA68C8;">fruits:</span><br/>
+                            &nbsp;&nbsp;<span style="color: #69F0AE;">-</span> banana<br/>
+                            &nbsp;&nbsp;<span style="color: #69F0AE;">-</span> apple<br/>
+                            &nbsp;&nbsp;<span style="color: #69F0AE;">-</span> orange
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Dictionary Section -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                        <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; letter-spacing: 1px; line-height: 1.8; text-align: left;">
+                            <span style="color: #BA68C8;">pen:</span><br/>
+                            &nbsp;&nbsp;<span style="color: #BA68C8;">color:</span> <span style="color: #FFEB3B;">yellow</span><br/>
+                            &nbsp;&nbsp;<span style="color: #BA68C8;">model:</span><br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #BA68C8;">type:</span> pen<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #BA68C8;">material:</span> <span style="color: #69F0AE;">plastic</span><br/>
+                            &nbsp;&nbsp;<span style="color: #BA68C8;">price:</span> <span style="color: #EC407A;">2</span>
+                        </div>
+                    </div>
+                    <div style="color: #FFEB3B; font-size: 36px; font-weight: bold;">
+                        DICTIONARY
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">28/41</div>
+        </div>
+
+        <!-- Slide 29: Advantages of Docker Compose -->
+        <div class="slide">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">ADVANTAGES OF</span> <span class="blue-text">DOCKER COMPOSE</span>
+            </div>
+            <div class="bullet-points">
+                <ul>
+                    <li>Declarative approach to <span class="highlight">creating containers</span></li>
+                    <li>All necessary containers are started with <span class="highlight">one command</span></li>
+                    <li>Automatic creation of necessary images based on <span class="highlight">Dockerfile</span> for each application</li>
+                    <li>Automatic creation of <span class="highlight">isolated network</span> for container interaction</li>
+                    <li>Thanks to <span class="highlight">DNS</span>, interaction between containers is possible using <span class="highlight">service names</span></li>
+                </ul>
+            </div>
+            <div class="slide-number">29/41</div>
+        </div>
+
+        <!-- Slide 30: Time App Application -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">TIME APP</span> <span style="color: #00BCD4;">APPLICATION</span>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 50px 80px; border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); text-align: center;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 72px; font-weight: bold; margin-bottom: 30px;">
+                        09:06:01
+                    </div>
+                    <div style="color: #90A4AE; font-size: 20px; margin-bottom: 30px;">
+                        Press the button to save to database
+                    </div>
+                    <div style="background: #64B5F6; color: #000; padding: 15px 40px; border-radius: 8px; font-size: 20px; font-weight: bold; display: inline-block; cursor: pointer;">
+                        Save Time
+                    </div>
+                    <div style="margin-top: 40px; text-align: left; color: #90A4AE; font-size: 18px;">
+                        <div style="margin-bottom: 10px;">Previously saved times:</div>
+                        <div style="color: #FFFFFF; font-family: 'Courier New', monospace;">
+                            09:06:01 <span style="color: #EC407A; margin-left: 20px;">Delete</span>
+                        </div>
+                        <div style="color: #FFFFFF; font-family: 'Courier New', monospace;">
+                            09:05:52 <span style="color: #EC407A; margin-left: 20px;">Delete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">30/41</div>
+        </div>
+
+        <!-- Slide 31: Time App Architecture -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">TIME APP</span> <span style="color: #00BCD4;">ARCHITECTURE</span>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="border: 3px solid #00BCD4; border-radius: 20px; padding: 60px; background: rgba(0, 188, 212, 0.05);">
+                    <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; margin-bottom: 50px; text-align: center;">
+                        Web Application
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 80px 60px; position: relative;">
+                        <!-- Vue.js Frontend -->
+                        <div style="border: 3px solid #42A5F5; border-radius: 15px; padding: 30px 40px; background: rgba(66, 165, 245, 0.1); text-align: center;">
+                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">Vue.js</div>
+                            <div style="color: #FFEB3B; font-size: 24px;">Frontend</div>
+                        </div>
+                        <!-- Node.js Backend -->
+                        <div style="border: 3px solid #66BB6A; border-radius: 15px; padding: 30px 40px; background: rgba(102, 187, 106, 0.1); text-align: center;">
+                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">Node.js</div>
+                            <div style="color: #FFEB3B; font-size: 24px;">Backend</div>
+                        </div>
+                        <!-- Adminer -->
+                        <div style="border: 3px solid #78909C; border-radius: 15px; padding: 30px 40px; background: rgba(120, 144, 156, 0.1); text-align: center;">
+                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">Adminer</div>
+                            <div style="color: #FFEB3B; font-size: 24px;">Database Management</div>
+                        </div>
+                        <!-- MySQL -->
+                        <div style="border: 3px solid #42A5F5; border-radius: 15px; padding: 30px 40px; background: rgba(66, 165, 245, 0.1); text-align: center;">
+                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">MySQL</div>
+                            <div style="color: #FFEB3B; font-size: 24px;">Database</div>
+                        </div>
+                        <!-- API box and arrows between Vue and Node (in horizontal gap) -->
+                        <div style="position: absolute; top: calc(25% - 20px); left: 50%; transform: translate(-50%, 0); display: flex; align-items: center; gap: 10px; z-index: 10;">
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">←</div>
+                            <div style="background: #BA68C8; color: #000; padding: 6px 20px; border-radius: 8px; font-size: 24px; font-weight: bold;">API</div>
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">→</div>
+                        </div>
+                        <!-- Vertical arrows between Node and MySQL (in vertical gap) -->
+                        <div style="position: absolute; top: 50%; left: calc(75% - 15px); transform: translate(0, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold; line-height: 1;">↑</div>
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold; line-height: 1;">↓</div>
+                        </div>
+                        <!-- Horizontal arrows between Adminer and MySQL (in horizontal gap) -->
+                        <div style="position: absolute; top: calc(75% + 20px); left: 50%; transform: translate(-50%, 0); display: flex; align-items: center; gap: 10px;">
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">←</div>
+                            <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">31/41</div>
+        </div>
+
+        <!-- Slide 32: Opening Ports -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">OPENING</span> <span style="color: #FFEB3B;">PORTS</span>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="border: 3px solid #00BCD4; border-radius: 20px; padding: 50px 80px; background: rgba(0, 188, 212, 0.05); position: relative;">
+                    <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; margin-bottom: 40px; text-align: center;">
+                        Docker
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <!-- Frontend Port Mapping -->
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3333</div>
+                            <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
+                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3000</div>
+                            <div style="border: 3px solid #00BCD4; border-radius: 12px; padding: 20px 40px; background: rgba(0, 188, 212, 0.1); flex: 1;">
+                                <div style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Frontend</div>
+                            </div>
+                        </div>
+                        <!-- Backend Port Mapping -->
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5555</div>
+                            <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
+                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5000</div>
+                            <div style="border: 3px solid #66BB6A; border-radius: 12px; padding: 20px 40px; background: rgba(102, 187, 106, 0.1); flex: 1;">
+                                <div style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Backend</div>
+                            </div>
+                        </div>
+                        <!-- Database Port -->
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="width: 100px;"></div>
+                            <div style="width: 30px;"></div>
+                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3306</div>
+                            <div style="border: 3px solid #42A5F5; border-radius: 12px; padding: 20px 40px; background: rgba(66, 165, 245, 0.1); flex: 1;">
+                                <div style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Database</div>
+                            </div>
+                        </div>
+                        <!-- Adminer Port Mapping -->
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">8888</div>
+                            <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
+                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">8080</div>
+                            <div style="border: 3px solid #78909C; border-radius: 12px; padding: 20px 40px; background: rgba(120, 144, 156, 0.1); flex: 1;">
+                                <div style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Database Management</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">32/41</div>
+        </div>
+
+        <!-- Slide 33: Launch Plan in Docker -->
+        <div class="slide">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">LAUNCH PLAN IN</span> <span style="color: #EC407A;">DOCKER</span>
+            </div>
+            <div class="bullet-points">
+                <ul>
+                    <li><span class="highlight">Goal</span> - launch the application in Docker containers for further development</li>
+                    <li>Create <span class="yellow-text">Dockerfile</span> for the <span class="yellow-text">Vue.js</span> frontend service</li>
+                    <li>Create <span class="yellow-text">Dockerfile</span> for the <span class="yellow-text">Node.js</span> backend service</li>
+                    <li>Find suitable images for <span class="yellow-text">MySQL</span>, <span class="yellow-text">Adminer</span> services on <span class="highlight">Docker Hub</span></li>
+                    <li>Create <span class="yellow-text">docker-compose.yml</span> file and describe four services, including port and volume configuration</li>
+                    <li>Launch all services and continue development</li>
+                </ul>
+            </div>
+            <div class="slide-number">33/41</div>
+        </div>
+
+        <!-- Slide 34: Docker Compose YML File -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">FILE</span> <span style="color: #EC407A;">DOCKER-COMPOSE.YML</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 60px;">
+                <!-- Left: Code Block -->
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6); flex: 1;">
+                    <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; line-height: 1.8; text-align: left;">
+                        <span style="color: #9E9E9E;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
+                        <br/>
+                        <span style="color: #9E9E9E;">services:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">frontend:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">api:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">adminer:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span>
+                    </div>
+                </div>
+                <!-- Right: Description -->
+                <div style="flex: 1; display: flex; align-items: center;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 235, 59, 0.1), rgba(255, 193, 7, 0.1)); padding: 30px 40px; border-radius: 15px; border: 2px solid #FFEB3B;">
+                        <div style="color: #FFEB3B; font-size: 28px; font-weight: bold; line-height: 1.6;">
+                            Services can interact with each other using service names
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">34/41</div>
+        </div>
+
+        <!-- Slide 35: Environment Variables -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">ENVIRONMENT</span> <span class="blue-text">VARIABLES</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 50px 70px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6);">
+                    <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 28px; line-height: 2; text-align: left;">
+                        <span style="color: #9E9E9E;">mysql:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">mysql</span><br/>
+                        &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #BA68C8; border: 2px solid #BA68C8; padding: 4px 12px; border-radius: 6px;">environment:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">MYSQL_ROOT_PASSWORD:</span> <span style="color: #A5D6A7;">password</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">MYSQL_DATABASE:</span> <span style="color: #A5D6A7;">time_db</span><br/>
+                        &nbsp;&nbsp;<span style="color: #666;">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">35/41</div>
+        </div>
+
+        <!-- Slide 36: Running Container with Environment Variable -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">RUNNING CONTAINER WITH</span> <span class="blue-text">ENVIRONMENT VARIABLE</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 32px; font-weight: bold; letter-spacing: 1px;">
+                        docker run -d -e MY_ENV_VARIABLE=test nginx
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">36/41</div>
+        </div>
+
+        <!-- Slide 37: Restart Specific Service -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">RESTART</span> <span class="blue-text">SPECIFIC SERVICE</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 1px;">
+                        docker-compose restart frontend
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">37/41</div>
+        </div>
+
+        <!-- Slide 38: Volume for Data Storage -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">VOLUME FOR</span> <span style="color: #00BCD4;">DATA STORAGE</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 60px;">
+                <!-- Left: docker-compose.yml code -->
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6); flex: 1;">
+                    <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; line-height: 1.8; text-align: left;">
+                        <span style="color: #9E9E9E;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
+                        <span style="color: #9E9E9E;">services:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">mysql</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">volumes:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">- </span><span style="color: #EC407A; border: 2px solid #EC407A; padding: 2px 8px; border-radius: 4px;">mysql_data</span><span style="color: #666;">:</span><span style="color: #66BB6A; border: 2px solid #66BB6A; padding: 2px 8px; border-radius: 4px;">/var/lib/mysql</span><br/>
+                        <br/>
+                        <span style="color: #9E9E9E;">volumes:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql_data:</span>
+                    </div>
+                </div>
+                <!-- Right: Description -->
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 235, 59, 0.1), rgba(255, 193, 7, 0.1)); padding: 30px 40px; border-radius: 15px; border: 2px solid #FFEB3B;">
+                        <div style="color: #FFEB3B; font-size: 28px; font-weight: bold; line-height: 1.6; text-align: center;">
+                            Volume inside Docker Host
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">38/41</div>
+        </div>
+
+        <!-- Slide 39: List Docker Volumes -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">LIST</span> <span class="blue-text">DOCKER VOLUMES</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 1px;">
+                        docker volume ls
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">39/41</div>
+        </div>
+
+        <!-- Slide 40: Volume for Development -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">VOLUME FOR</span> <span style="color: #00BCD4;">DEVELOPMENT</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 60px;">
+                <!-- Left: docker-compose.yml code -->
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6); flex: 1;">
+                    <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; line-height: 1.8; text-align: left;">
+                        <span style="color: #9E9E9E;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
+                        <span style="color: #9E9E9E;">services:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">frontend:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">build:</span> <span style="color: #A5D6A7;">./frontend</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">volumes:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">- </span><span style="color: #EC407A; border: 2px solid #EC407A; padding: 2px 8px; border-radius: 4px;">/app/node_modules</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">- </span><span style="color: #BA68C8; border: 2px solid #BA68C8; padding: 2px 8px; border-radius: 4px;">./frontend:/app</span>
+                    </div>
+                </div>
+                <!-- Right: Descriptions -->
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 50px;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 235, 59, 0.1), rgba(255, 193, 7, 0.1)); padding: 25px 35px; border-radius: 15px; border: 2px solid #FFEB3B;">
+                        <div style="color: #FFEB3B; font-size: 24px; font-weight: bold; line-height: 1.6; text-align: center;">
+                            Use node_modules folder from the image
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(255, 235, 59, 0.1), rgba(255, 193, 7, 0.1)); padding: 25px 35px; border-radius: 15px; border: 2px solid #FFEB3B;">
+                        <div style="color: #FFEB3B; font-size: 24px; font-weight: bold; line-height: 1.6; text-align: center;">
+                            Folder with application files
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">40/41</div>
+        </div>
+
+        <!-- Slide 41: Adding Environment Variables for Backend -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">ADDING ENVIRONMENT VARIABLES</span><br/>
+                <span class="blue-text">FOR BACKEND SERVICE</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 40px 50px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6);">
+                    <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 24px; line-height: 1.8; text-align: left;">
+                        <span style="color: #9E9E9E;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
+                        <span style="color: #9E9E9E;">services:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">api:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">build:</span> <span style="color: #A5D6A7;">./api</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">environment:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">DB_HOST:</span> <span style="color: #A5D6A7;">db</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">DB_USER:</span> <span style="color: #A5D6A7;">root</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">DB_PASSWORD:</span> <span style="color: #A5D6A7;">password</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">DB_NAME:</span> <span style="color: #A5D6A7;">time_db</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">41/41</div>
+        </div>
+
+    <script>
+        // Instructions for the user
+        console.log(`
+        =====================================
+        DOCKER TRAINING SLIDES - INSTRUCTIONS
+        =====================================
+        
+        This HTML file contains 4 styled slides for your Docker presentation.
+        
+        TO CREATE IMAGES:
+        1. Open this file in your web browser (Chrome, Firefox, Safari, etc.)
+        2. Use screenshot tool or browser extension to capture each slide
+        3. Recommended screenshot size: 1280x720 pixels
+        
+        ALTERNATIVE: Use browser's print function
+        1. Press Ctrl+P (or Cmd+P on Mac)
+        2. Save as PDF
+        3. Convert PDF pages to images if needed
+        
+        The slides are styled to match the original design with:
+        - Dark blue background (#000033)
+        - Yellow text for emphasis (#FFEB3B)
+        - Blue text for Docker-related terms (#2196F3)
+        - Clean, professional layout
+        `);
+    </script>
+</body>
+</html>
