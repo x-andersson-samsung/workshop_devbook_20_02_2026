@@ -139,7 +139,7 @@
         <div class="slide-subtitle">
             <span class="yellow-text">FOR RUNNING APPLICATIONS IN CONTAINERS</span>
         </div>
-        <div class="slide-number">1/45</div>
+        <div class="slide-number">1/46</div>
     </div>
 
     <!-- Slide 2: Why Use Docker -->
@@ -156,7 +156,7 @@
                 <li>Very convenient to use in the application <span class="highlight">development</span> process</li>
             </ul>
         </div>
-        <div class="slide-number">2/45</div>
+        <div class="slide-number">2/46</div>
     </div>
 
     <!-- Slide 3: What is a Container -->
@@ -164,7 +164,7 @@
         <div class="slide-title">
             <span class="blue-text">A CONTAINER</span> <span class="white-text">IS THE</span> <span class="yellow-text">SMALLEST ELEMENT</span> <span class="white-text">IN THE</span> <span class="blue-text">DOCKER WORLD</span>
         </div>
-        <div class="slide-number">3/45</div>
+        <div class="slide-number">3/46</div>
     </div>
 
         <!-- Slide 4: Docker Components -->
@@ -202,7 +202,7 @@
                     <div class="component-description">Service that stores repositories</div>
                 </div>
             </div>
-            <div class="slide-number">4/45</div>
+            <div class="slide-number">4/46</div>
     </div>
 
         <!-- Slide 5: Docker Daemon -->
@@ -232,7 +232,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">5/45</div>
+            <div class="slide-number">5/46</div>
         </div>
 
         <!-- Slide 6: How Containers Work -->
@@ -286,7 +286,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">6/45</div>
+            <div class="slide-number">6/46</div>
         </div>
 
         <!-- Slide 6: Docker on Mac and Windows -->
@@ -349,7 +349,7 @@
                 </div>
             </div>
 
-            <div class="slide-number">7/45</div>
+            <div class="slide-number">7/46</div>
         </div>
 
         <!-- Slide 7: One Image, Many Containers -->
@@ -404,7 +404,7 @@
                     A single Docker image serves as a template that can be used to create multiple running container instances
                 </div>
             </div>
-            <div class="slide-number">8/45</div>
+            <div class="slide-number">8/46</div>
         </div>
 
         <!-- Slide 8: Structure of Images -->
@@ -439,7 +439,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">9/45</div>
+            <div class="slide-number">9/46</div>
         </div>
 
         <!-- Slide 9: What is a Repository -->
@@ -493,7 +493,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">10/45</div>
+            <div class="slide-number">10/46</div>
         </div>
 
         <!-- Slide 10: Docker Command Example -->
@@ -510,7 +510,7 @@
                     <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">docker ps -a</div>
                 </div>
             </div>
-            <div class="slide-number">11/45</div>
+            <div class="slide-number">11/46</div>
         </div>
 
         <!-- Slide 11: Docker Images Command -->
@@ -525,7 +525,7 @@
                     <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 2px;">docker images</div>
                 </div>
             </div>
-            <div class="slide-number">12/45</div>
+            <div class="slide-number">12/46</div>
         </div>
 
         <!-- Slide 12: Docker Run Command -->
@@ -550,7 +550,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">13/45</div>
+            <div class="slide-number">13/46</div>
         </div>
 
         <!-- Slide 13: Docker Rm Command -->
@@ -579,7 +579,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">14/45</div>
+            <div class="slide-number">14/46</div>
         </div>
 
         <!-- Slide 14: Creating Busybox Container -->
@@ -587,7 +587,7 @@
             <div class="slide-title">
                 <span class="yellow-text">CREATING BUSYBOX</span> <span class="blue-text">CONTAINER</span>
             </div>
-            <div class="slide-number">15/45</div>
+            <div class="slide-number">15/46</div>
         </div>
 
         <!-- Slide 15: Docker Run -d Command -->
@@ -626,7 +626,7 @@
                     <div>Creates and runs container</div>
                 </div>
             </div>
-            <div class="slide-number">16/45</div>
+            <div class="slide-number">16/46</div>
         </div>
 
         <!-- Slide 16: Docker Stop Command -->
@@ -663,10 +663,60 @@
                     <div>Stops a running container</div>
                 </div>
             </div>
-            <div class="slide-number">17/45</div>
+            <div class="slide-number">17/46</div>
         </div>
 
-        <!-- Slide 17: Mapping Ports -->
+        <!-- Slide 17: Docker Exec Command -->
+        <div class="slide" style="padding: 40px;">
+            <div class="slide-title" style="margin-bottom: 60px;">
+                <span class="yellow-text">RUNNING ADDITIONAL PROCESSES</span><br/>
+                <span class="blue-text">IN RUNNING CONTAINER</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <!-- Command Box with annotations -->
+                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); position: relative; margin-top: 80px;">
+                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 32px; font-weight: bold; letter-spacing: 1px;">
+                        docker exec <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">-it</span> <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">311c5a02feeb</span> <span style="background: rgba(156, 39, 176, 0.4); padding: 2px 8px; border-radius: 4px;">bash</span>
+                    </div>
+
+                    <!-- Annotation: Executes command - positioned above the command -->
+                    <div style="position: absolute; left: 100px; top: -70px;">
+                        <div style="color: #FFEB3B; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.3;">
+                            Executes command<br/>in running container
+                        </div>
+                        <div style="color: #FFEB3B; font-size: 30px; text-align: center;">↓</div>
+                    </div>
+
+                    <!-- Annotation: Interactive terminal options -->
+                    <div style="position: absolute; left: 310px; top: -70px;">
+                        <div style="color: #FFEB3B; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.3;">
+                            Interactive<br/>terminal options
+                        </div>
+                        <div style="color: #FFEB3B; font-size: 30px; text-align: center;">↓</div>
+                    </div>
+
+                    <!-- Annotation: Container ID or name -->
+                    <div style="position: absolute; left: 450px; top: -70px;">
+                        <div style="color: #FFEB3B; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.3;">
+                            Container ID<br/>or name
+                        </div>
+                        <div style="color: #FFEB3B; font-size: 30px; text-align: center;">↓</div>
+                    </div>
+
+                    <!-- Annotation: Process name -->
+                    <div style="position: absolute; right: 80px; top: -70px;">
+                        <div style="color: #FFEB3B; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.3;">
+                            Process<br/>name
+                        </div>
+                        <div style="color: #FFEB3B; font-size: 30px; text-align: center;">↓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">18/46</div>
+        </div>
+
+        <!-- Slide 18: Mapping Ports -->
         <div class="slide" style="padding: 40px;">
             <div class="slide-title" style="margin-bottom: 80px;">
                 <span class="yellow-text">MAPPING</span> <span class="blue-text">PORTS</span>
@@ -688,7 +738,7 @@
                     <div>Creating and running container</div>
                 </div>
             </div>
-            <div class="slide-number">18/45</div>
+            <div class="slide-number">19/46</div>
         </div>
 
         <!-- Slide 18: Bind Mount -->
@@ -730,7 +780,7 @@
                 </div>
 
             </div>
-            <div class="slide-number">19/45</div>
+            <div class="slide-number">20/46</div>
         </div>
 
         <!-- Slide 19: Remove Automatically Stopped Containers -->
@@ -747,7 +797,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">20/45</div>
+            <div class="slide-number">21/46</div>
         </div>
 
         <!-- Slide 20: Line Breaks in Commands -->
@@ -770,7 +820,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">21/45</div>
+            <div class="slide-number">21/46</div>
         </div>
 
         <!-- Slide 21: Steps for Creating Images -->
@@ -787,7 +837,7 @@
                     <li>Based on a ready image, you can create <span class="highlight">containers</span></li>
                 </ul>
             </div>
-            <div class="slide-number">22/45</div>
+            <div class="slide-number">22/46</div>
         </div>
 
         <!-- Slide 22: Dockerfile Example -->
@@ -810,7 +860,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">23/45</div>
+            <div class="slide-number">23/46</div>
         </div>
 
         <!-- Slide 24: Using ADD Instead of COPY -->
@@ -854,7 +904,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">24/45</div>
+            <div class="slide-number">24/46</div>
         </div>
 
         <!-- Slide 24: Docker Build Command -->
@@ -871,7 +921,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">25/45</div>
+            <div class="slide-number">25/46</div>
         </div>
 
         <!-- Slide 24: Stop All Running Containers -->
@@ -888,7 +938,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">26/45</div>
+            <div class="slide-number">26/46</div>
         </div>
 
         <!-- Slide 25: Docker Compose -->
@@ -899,7 +949,7 @@
             <div class="slide-title">
                 <span class="yellow-text">COMPOSE</span>
             </div>
-            <div class="slide-number">27/45</div>
+            <div class="slide-number">27/46</div>
         </div>
 
         <!-- Slide 26: Imperative Approach -->
@@ -929,7 +979,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">28/45</div>
+            <div class="slide-number">28/46</div>
         </div>
 
         <!-- Slide 27: Declarative Approach -->
@@ -960,7 +1010,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">29/45</div>
+            <div class="slide-number">29/46</div>
         </div>
 
         <!-- Slide 28: YAML Format -->
@@ -1001,7 +1051,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">30/45</div>
+            <div class="slide-number">30/46</div>
         </div>
 
         <!-- Slide 29: Advantages of Docker Compose -->
@@ -1018,7 +1068,7 @@
                     <li>Thanks to <span class="highlight">DNS</span>, interaction between containers is possible using <span class="highlight">service names</span></li>
                 </ul>
             </div>
-            <div class="slide-number">31/45</div>
+            <div class="slide-number">31/46</div>
         </div>
 
         <!-- Slide 30: Time App Application -->
@@ -1048,7 +1098,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">32/45</div>
+            <div class="slide-number">32/46</div>
         </div>
 
         <!-- Slide 31: Time App Architecture -->
@@ -1101,7 +1151,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">33/45</div>
+            <div class="slide-number">33/46</div>
         </div>
 
         <!-- Slide 32: Opening Ports -->
@@ -1117,7 +1167,7 @@
                     <div style="display: flex; flex-direction: column; gap: 30px;">
                         <!-- Frontend Port Mapping -->
                         <div style="display: flex; align-items: center; gap: 20px;">
-                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3333</div>
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3000</div>
                             <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
                             <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3000</div>
                             <div style="border: 3px solid #00BCD4; border-radius: 12px; padding: 20px 40px; background: rgba(0, 188, 212, 0.1); flex: 1;">
@@ -1126,7 +1176,7 @@
                         </div>
                         <!-- Backend Port Mapping -->
                         <div style="display: flex; align-items: center; gap: 20px;">
-                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5555</div>
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5000</div>
                             <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
                             <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5000</div>
                             <div style="border: 3px solid #66BB6A; border-radius: 12px; padding: 20px 40px; background: rgba(102, 187, 106, 0.1); flex: 1;">
@@ -1137,14 +1187,14 @@
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div style="width: 100px;"></div>
                             <div style="width: 30px;"></div>
-                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">3306</div>
+                            <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">5432</div>
                             <div style="border: 3px solid #42A5F5; border-radius: 12px; padding: 20px 40px; background: rgba(66, 165, 245, 0.1); flex: 1;">
                                 <div style="color: #FFEB3B; font-size: 24px; font-weight: bold;">Database</div>
                             </div>
                         </div>
                         <!-- Adminer Port Mapping -->
                         <div style="display: flex; align-items: center; gap: 20px;">
-                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">8888</div>
+                            <div style="background: #69F0AE; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">8080</div>
                             <div style="color: #FFEB3B; font-size: 40px; font-weight: bold; width: 30px; text-align: center;">→</div>
                             <div style="background: #FFEB3B; color: #000; padding: 15px 30px; border-radius: 10px; font-size: 28px; font-weight: bold; width: 100px; text-align: center;">8080</div>
                             <div style="border: 3px solid #78909C; border-radius: 12px; padding: 20px 40px; background: rgba(120, 144, 156, 0.1); flex: 1;">
@@ -1154,7 +1204,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">34/45</div>
+            <div class="slide-number">34/46</div>
         </div>
 
         <!-- Slide 33: Launch Plan in Docker -->
@@ -1172,7 +1222,7 @@
                     <li>Launch all services and continue development</li>
                 </ul>
             </div>
-            <div class="slide-number">35/45</div>
+            <div class="slide-number">35/46</div>
         </div>
 
         <!-- Slide 34: Docker Compose YML File -->
@@ -1191,7 +1241,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
                         &nbsp;&nbsp;<span style="color: #9E9E9E;">api:</span><br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
-                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">db:</span><br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
                         &nbsp;&nbsp;<span style="color: #9E9E9E;">adminer:</span><br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span>
@@ -1206,7 +1256,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">36/45</div>
+            <div class="slide-number">36/46</div>
         </div>
 
         <!-- Slide 35: Environment Variables -->
@@ -1227,7 +1277,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">37/45</div>
+            <div class="slide-number">37/46</div>
         </div>
 
         <!-- Slide 36: Running Container with Environment Variable -->
@@ -1242,7 +1292,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">38/45</div>
+            <div class="slide-number">38/46</div>
         </div>
 
         <!-- Slide 37: Restart Specific Service -->
@@ -1257,7 +1307,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">39/45</div>
+            <div class="slide-number">39/46</div>
         </div>
 
         <!-- Slide 38: Volume for Data Storage -->
@@ -1291,7 +1341,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">40/45</div>
+            <div class="slide-number">40/46</div>
         </div>
 
         <!-- Slide 39: List Docker Volumes -->
@@ -1306,7 +1356,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">41/45</div>
+            <div class="slide-number">41/46</div>
         </div>
 
         <!-- Slide 40: Volume for Development -->
@@ -1342,7 +1392,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">42/45</div>
+            <div class="slide-number">42/46</div>
         </div>
 
         <!-- Slide 41: Adding Environment Variables for Backend -->
@@ -1368,7 +1418,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">43/45</div>
+            <div class="slide-number">43/46</div>
         </div>
 
         <!-- Slide 43: Filter Containers by Exit Status -->
@@ -1391,22 +1441,30 @@
                     </div>
                 </div>
             </div>
-            <div class="slide-number">44/45</div>
+            <div class="slide-number">44/46</div>
         </div>
 
-        <!-- Slide 44: List Docker Volumes -->
+        <!-- Slide 45: Docker Networks -->
         <div class="slide" style="padding: 40px;">
-            <div class="slide-title" style="margin-bottom: 80px;">
-                <span class="yellow-text">LIST ALL</span> <span class="blue-text">DOCKER VOLUMES</span>
+            <div class="slide-title" style="margin-bottom: 40px;">
+                <span class="yellow-text">DOCKER</span> <span class="blue-text">NETWORKS</span>
             </div>
-            <div style="display: flex; justify-content: center;">
-                <div style="background: linear-gradient(135deg, #1B5E20, #2E7D32); padding: 40px 60px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">
-                    <div style="color: #69F0AE; font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 1px;">
-                        docker volume ls
-                    </div>
-                </div>
+            <div class="bullet-points">
+                <ul>
+                    <li style="margin-bottom: 35px;"><span class="highlight">What is it?</span> Virtual network that allows containers to communicate with each other</li>
+                    <li style="margin-bottom: 35px;">Docker Compose <span class="highlight">automatically creates</span> a default network (e.g., <span class="highlight">project_default</span>)</li>
+                    <li style="margin-bottom: 35px;">All services are <span class="highlight">connected to this network</span> by default</li>
+                    <li style="margin-bottom: 35px;">Services can communicate using <span class="highlight">service names as DNS</span></li>
+                    <li style="margin-bottom: 35px;"><span class="highlight">When to define networks explicitly:</span>
+                        <ul style="margin-top: 15px; margin-left: 40px;">
+                            <li style="font-size: 24px; margin-bottom: 10px;">Need <span class="highlight">multiple isolated networks</span></li>
+                            <li style="font-size: 24px; margin-bottom: 10px;">Connect to <span class="highlight">external networks</span></li>
+                            <li style="font-size: 24px; margin-bottom: 10px;">Custom <span class="highlight">network configuration</span> (IP ranges, drivers)</li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <div class="slide-number">45/45</div>
+            <div class="slide-number">45/46</div>
         </div>
 
     <script>
