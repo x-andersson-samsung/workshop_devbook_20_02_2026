@@ -1127,9 +1127,9 @@
                             <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">Adminer</div>
                             <div style="color: #FFEB3B; font-size: 24px;">Database Management</div>
                         </div>
-                        <!-- MySQL -->
+                        <!-- PostgreSQL -->
                         <div style="border: 3px solid #42A5F5; border-radius: 15px; padding: 30px 40px; background: rgba(66, 165, 245, 0.1); text-align: center;">
-                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">MySQL</div>
+                            <div style="color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 10px;">PostgreSQL</div>
                             <div style="color: #FFEB3B; font-size: 24px;">Database</div>
                         </div>
                         <!-- API box and arrows between Vue and Node (in horizontal gap) -->
@@ -1138,12 +1138,12 @@
                             <div style="background: #BA68C8; color: #000; padding: 6px 20px; border-radius: 8px; font-size: 24px; font-weight: bold;">API</div>
                             <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">→</div>
                         </div>
-                        <!-- Vertical arrows between Node and MySQL (in vertical gap) -->
+                        <!-- Vertical arrows between Node and PostgreSQL (in vertical gap) -->
                         <div style="position: absolute; top: 50%; left: calc(75% - 15px); transform: translate(0, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px;">
                             <div style="color: #FFEB3B; font-size: 32px; font-weight: bold; line-height: 1;">↑</div>
                             <div style="color: #FFEB3B; font-size: 32px; font-weight: bold; line-height: 1;">↓</div>
                         </div>
-                        <!-- Horizontal arrows between Adminer and MySQL (in horizontal gap) -->
+                        <!-- Horizontal arrows between Adminer and PostgreSQL (in horizontal gap) -->
                         <div style="position: absolute; top: calc(75% + 20px); left: 50%; transform: translate(-50%, 0); display: flex; align-items: center; gap: 10px;">
                             <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">←</div>
                             <div style="color: #FFEB3B; font-size: 32px; font-weight: bold;">→</div>
@@ -1217,7 +1217,7 @@
                     <li><span class="highlight">Goal</span> - launch the application in Docker containers for further development</li>
                     <li>Create <span class="yellow-text">Dockerfile</span> for the <span class="yellow-text">Vue.js</span> frontend service</li>
                     <li>Create <span class="yellow-text">Dockerfile</span> for the <span class="yellow-text">Node.js</span> backend service</li>
-                    <li>Find suitable images for <span class="yellow-text">MySQL</span>, <span class="yellow-text">Adminer</span> services on <span class="highlight">Docker Hub</span></li>
+                    <li>Find suitable images for <span class="yellow-text">PostgreSQL</span>, <span class="yellow-text">Adminer</span> services on <span class="highlight">Docker Hub</span></li>
                     <li>Create <span class="yellow-text">docker-compose.yml</span> file and describe four services, including port and volume configuration</li>
                     <li>Launch all services and continue development</li>
                 </ul>
@@ -1267,12 +1267,12 @@
             <div style="display: flex; justify-content: center;">
                 <div style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d); padding: 50px 70px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.6);">
                     <div style="color: #FFFFFF; font-family: 'Courier New', monospace; font-size: 28px; line-height: 2; text-align: left;">
-                        <span style="color: #9E9E9E;">mysql:</span><br/>
-                        &nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">mysql</span><br/>
+                        <span style="color: #9E9E9E;">db:</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">postgres</span><br/>
                         &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
                         &nbsp;&nbsp;<span style="color: #BA68C8; border: 2px solid #BA68C8; padding: 4px 12px; border-radius: 6px;">environment:</span><br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">MYSQL_ROOT_PASSWORD:</span> <span style="color: #A5D6A7;">password</span><br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">MYSQL_DATABASE:</span> <span style="color: #A5D6A7;">time_db</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">POSTGRES_PASSWORD:</span> <span style="color: #A5D6A7;">password</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">POSTGRES_DB:</span> <span style="color: #A5D6A7;">time_db</span><br/>
                         &nbsp;&nbsp;<span style="color: #666;">...</span>
                     </div>
                 </div>
@@ -1322,14 +1322,14 @@
                         <span style="color: #9E9E9E;">version:</span> <span style="color: #A5D6A7;">'3'</span><br/>
                         <span style="color: #9E9E9E;">services:</span><br/>
                         &nbsp;&nbsp;<span style="color: #666;">...</span><br/>
-                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql:</span><br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">mysql</span><br/>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">db:</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">image:</span> <span style="color: #A5D6A7;">postgres</span><br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">...</span><br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9E9E9E;">volumes:</span><br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">- </span><span style="color: #EC407A; border: 2px solid #EC407A; padding: 2px 8px; border-radius: 4px;">mysql_data</span><span style="color: #666;">:</span><span style="color: #66BB6A; border: 2px solid #66BB6A; padding: 2px 8px; border-radius: 4px;">/var/lib/mysql</span><br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">- </span><span style="color: #EC407A; border: 2px solid #EC407A; padding: 2px 8px; border-radius: 4px;">postgres_data</span><span style="color: #666;">:</span><span style="color: #66BB6A; border: 2px solid #66BB6A; padding: 2px 8px; border-radius: 4px;">/var/lib/postgresql/data</span><br/>
                         <br/>
                         <span style="color: #9E9E9E;">volumes:</span><br/>
-                        &nbsp;&nbsp;<span style="color: #9E9E9E;">mysql_data:</span>
+                        &nbsp;&nbsp;<span style="color: #9E9E9E;">postgres_data:</span>
                     </div>
                 </div>
                 <!-- Right: Description -->
